@@ -81,7 +81,7 @@
             blue = data[2],
             alpha = data[3];
             
-            console.log(data);
+            //console.log(data);
             //subtracting to get the coordinates relative to the canvas, not the page.
             $('#status').html(x + ', ' + y + '<br/> Red: ' + red + ', Green: ' + green + ', Blue: ' + blue + ', Alpha: ' + alpha);
 
@@ -97,6 +97,26 @@
         $('#status').html('Mouse is outside Canvas element. Bring mouse back inside.');
       }
 
+
+    });
+
+    $(document).click(function(e) {
+      var circle = $('<div id="circle"></div>'),
+      styles = {
+        'background':             'black',
+        '-webkit-border-radius':  '50px',
+        'width':                  "30px",
+        'height':                 "30px",
+        'z-index':                "30",
+        'position':               "absolute",
+        'top':                    e.pageY - 15,
+        'left':                   e.pageX - 15
+      };
+
+      circle.css(styles);
+      console.log($('#liver'));
+      $('#circle').remove();
+      $('div#liver').append(circle);
 
     });
 
