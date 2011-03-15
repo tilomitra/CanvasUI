@@ -1,4 +1,11 @@
   $(document).ready(function() {
+
+    //GLOBALS
+    CANVASTOP = 160;
+    CANVASLEFT = 200;
+
+
+
     function greyScale(image, bPlaceImage, container){
       console.log(image.src);
       var myCanvas=document.createElement("canvas");
@@ -59,10 +66,8 @@
     $(document).mousemove(function(e) {
 
       var canvas = document.getElementById('liverCanvas'),
-      CANVASTOP = 160;
-      CANVASLEFT = 200;
-      CANVASWIDTH = canvas.width;
-      CANVASHEIGHT = canvas.height;
+      CANVASWIDTH = (canvas) ? canvas.width : undefined;
+      CANVASHEIGHT = (canvas) ? canvas.height : undefined;
 
 
 
@@ -100,26 +105,73 @@
 
     });
 
-    $(document).click(function(e) {
-      var circle = $('<div id="circle"></div>'),
+    //TODO: this is on the document now, but should just be on the canvas element.
+    $('#liver').mousedown(function(e) {
+      
+
+      //on mousedown, find the color of the pixel that is being clicked.
+      //then use the RGBtoHex to convert that to Hex and create a circle at that point.
+      //The circle will disappear over time (animate opacity)
+
+      var circle = $('<div class="circle"></div>'),
+      context = document.getElementById('liverCanvas').getContext('2d'),
+      data = context.getImageData(e.pageX-CANVASLEFT, e.pageY-CANVASTOP, 1, 1).data,
       styles = {
-        'background':             'black',
+        'background':             '#'+RGBtoHex(data[0],data[1], data[2]), //some dark red color
         '-webkit-border-radius':  '50px',
-        'width':                  "30px",
-        'height':                 "30px",
+        'width':                  "10px",
+        'height':                 "10px",
         'z-index':                "30",
+        'opacity':                '0',
         'position':               "absolute",
-        'top':                    e.pageY - 15,
-        'left':                   e.pageX - 15
+        'top':                    e.pageY - 5,
+        'left':                   e.pageX - 5
       };
 
       circle.css(styles);
-      console.log($('#liver'));
-      $('#circle').remove();
+
       $('div#liver').append(circle);
+      $(circle).animate({
+        opacity: 0.8,
+        width: '30px',
+        height: '30px',
+        top: e.pageY - 15,
+        left: e.pageX - 15
+      }, 500);
 
     });
 
+    setInterval(slowlyRemoveCircles, 1000);
 
+    function slowlyRemoveCircles() {
+    $('.circle').each(function(index) {
+      var self = $(this),
+      oldOpacity = self.css('opacity');
+      if (oldOpacity > 0.10) {
 
-  });
+        self.animate({
+          opacity: 0 // oldOpacity - 0.15,
+        }, 2000);
+      }
+      else {
+        self.remove();
+      }
+    });
+  }
+
+  function RGBtoHex(R,G,B) {
+    return toHex(R)+toHex(G)+toHex(B)
+  }
+  
+  function toHex(N) {
+    if (N==null) return "00";
+    N=parseInt(N); 
+    if (N==0 || isNaN(N)) return "00";
+    N=Math.max(0,N); 
+    N=Math.min(N,255); 
+    N=Math.round(N);
+    return "0123456789ABCDEF".charAt((N-N%16)/16)
+      + "0123456789ABCDEF".charAt(N%16);
+  }
+
+});
