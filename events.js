@@ -1,8 +1,11 @@
   $(document).ready(function() {
 
     //GLOBALS
-    CANVASTOP = 160;
-    CANVASLEFT = 200;
+    var CANVASTOP = 160,
+    CANVASLEFT = 200,
+    CIRCLE = $('<div class="circle"></div>'),
+    CLICK_X=0,
+    CLICK_Y=0;
 
 
 
@@ -52,13 +55,14 @@
     }
   
     $('#convert').click(function(e) {
-      var self = this;
+      var self = $(this);
       e.preventDefault();
       var liverImg = document.getElementById('liverImg');
       var container = document.getElementById('liver');
       var dataUrl = greyScale(liverImg, true, container);
       if (dataUrl) {
-        this.text('Converted!');
+        $(this).val('Converted');
+        $(this).attr('disabled', 'true');
       }
 
     });
@@ -88,7 +92,7 @@
             
             //console.log(data);
             //subtracting to get the coordinates relative to the canvas, not the page.
-            $('#status').html(x + ', ' + y + '<br/> Red: ' + red + ', Green: ' + green + ', Blue: ' + blue + ', Alpha: ' + alpha);
+            $('#status').html('X: ' + x + ', Y: ' + y + '<br/> Red: ' + red + ', Green: ' + green + ', Blue: ' + blue + ', Alpha: ' + alpha);
 
       }
 
@@ -105,7 +109,50 @@
 
     });
 
+    $("#liver").mousehold(100, function(i){  
+      console.log(i);
+      context = document.getElementById('liverCanvas').getContext('2d'),
+      data = context.getImageData(CLICK_X - CANVASLEFT, CLICK_Y - CANVASTOP, 1, 1).data,
+      styles = {
+        'background':             '#'+RGBtoHex(data[0]-20,data[1]-50, data[2]+40), //some dark red color
+        '-webkit-border-radius':  '50px',
+        'width':                  10 + 4*i + 'px',
+        'height':                 10 + 4*i + 'px',
+        'z-index':                "30",
+        'opacity':                '0',
+        'position':               "absolute",
+        'top':                    CLICK_Y - 5,
+        'left':                   CLICK_X - 5
+      };
+
+      CIRCLE.css(styles);
+
+      //$('div#liver').append(CIRCLE);
+    //   $(CIRCLE).animate({
+    //     opacity: 0.8,
+    //     width: 10 + i +'px',
+    //     height: 10 + i + 'px',
+    //     top: CLICK_Y - 15,
+    //     left: CLICK_X - 15
+    //   }, 200);
+    });
+
+    $('#liver').mousedown(function(e) {
+      CLICK_X = e.pageX;
+      CLICK_Y = e.pageY;
+    });
+
+
+    $("#liver").mouseup(function() {
+      $('div#liver').append(CIRCLE);
+      $(CIRCLE).animate({
+        opacity: 0.8,
+      }, 200);
+      console.log(CIRCLE);
+    });
+
     //TODO: this is on the document now, but should just be on the canvas element.
+    /*
     $('#liver').mousedown(function(e) {
       
 
@@ -140,6 +187,7 @@
       }, 500);
 
     });
+    */
 
     setInterval(slowlyRemoveCircles, 1000);
 
