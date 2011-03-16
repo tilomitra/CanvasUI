@@ -109,32 +109,33 @@
 
     });
 
-    $("#liver").mousehold(100, function(i){  
+    $("#liver").mousehold(50, function(i){  
       console.log(i);
+      var newCircle = $('<div class="circle"></div>'),
       context = document.getElementById('liverCanvas').getContext('2d'),
       data = context.getImageData(CLICK_X - CANVASLEFT, CLICK_Y - CANVASTOP, 1, 1).data,
-      styles = {
-        'background':             '#'+RGBtoHex(data[0]-20,data[1]-50, data[2]+40), //some dark red color
-        '-webkit-border-radius':  '50px',
-        'width':                  10 + 4*i + 'px',
-        'height':                 10 + 4*i + 'px',
-        'z-index':                "30",
-        'opacity':                '0',
-        'position':               "absolute",
-        'top':                    CLICK_Y - 5,
-        'left':                   CLICK_X - 5
-      };
+      bg = '#'+RGBtoHex(data[0],data[1], data[2]);
+      
 
-      CIRCLE.css(styles);
+      if (i < 25) {
+        var styles = {
+          //'background':              '-webkit-gradient(radial, 206 -88, 0, 0 -29, 412, from(#FCFCFC), to(#000), color-stop(.7,'+bg+'))',
+          'background':             'transparent url("incision2.png") no-repeat',
+          '-webkit-border-radius':  '50px',
+          'width':                  50 + 3*i + 'px',
+          'height':                 50 + 3*i + 'px',
+          'z-index':                "30",
+          'opacity':                0.2+0.1*i+'',
+          'position':               "absolute",
+          'top':                    CLICK_Y - (50 + 3*1),
+          'left':                   CLICK_X - (50 + 3*1)
+        };
 
-      //$('div#liver').append(CIRCLE);
-    //   $(CIRCLE).animate({
-    //     opacity: 0.8,
-    //     width: 10 + i +'px',
-    //     height: 10 + i + 'px',
-    //     top: CLICK_Y - 15,
-    //     left: CLICK_X - 15
-    //   }, 200);
+        newCircle.css(styles);
+        $('div#liver .circle').remove();
+        $('div#liver').append(newCircle);
+      }
+
     });
 
     $('#liver').mousedown(function(e) {
@@ -144,52 +145,14 @@
 
 
     $("#liver").mouseup(function() {
-      $('div#liver').append(CIRCLE);
+      //$('div#liver').append(CIRCLE);
       $(CIRCLE).animate({
         opacity: 0.8,
       }, 200);
       console.log(CIRCLE);
+
+      slowlyRemoveCircles();
     });
-
-    //TODO: this is on the document now, but should just be on the canvas element.
-    /*
-    $('#liver').mousedown(function(e) {
-      
-
-      //on mousedown, find the color of the pixel that is being clicked.
-      //then use the RGBtoHex to convert that to Hex and create a circle at that point.
-      //The circle will disappear over time (animate opacity)
-
-      var circle = $('<div class="circle"></div>'),
-      context = document.getElementById('liverCanvas').getContext('2d'),
-      data = context.getImageData(e.pageX-CANVASLEFT, e.pageY-CANVASTOP, 1, 1).data,
-      styles = {
-        'background':             '#'+RGBtoHex(data[0],data[1], data[2]), //some dark red color
-        '-webkit-border-radius':  '50px',
-        'width':                  "10px",
-        'height':                 "10px",
-        'z-index':                "30",
-        'opacity':                '0',
-        'position':               "absolute",
-        'top':                    e.pageY - 5,
-        'left':                   e.pageX - 5
-      };
-
-      circle.css(styles);
-
-      $('div#liver').append(circle);
-      $(circle).animate({
-        opacity: 0.8,
-        width: '30px',
-        height: '30px',
-        top: e.pageY - 15,
-        left: e.pageX - 15
-      }, 500);
-
-    });
-    */
-
-    setInterval(slowlyRemoveCircles, 1000);
 
     function slowlyRemoveCircles() {
     $('.circle').each(function(index) {
@@ -198,12 +161,12 @@
       if (oldOpacity > 0.10) {
 
         self.animate({
-          opacity: 0 // oldOpacity - 0.15,
-        }, 2000);
+          opacity: 0.4 //some random opacity between 0 and 0.5
+        }, 10000);
       }
-      else {
-        self.remove();
-      }
+
+      //remove it from the circle class so it doesn't disappear when a new circle is drawn.
+      self.removeClass('circle').addClass('oldCircle');
     });
   }
 
