@@ -3,7 +3,7 @@
     //GLOBALS
     var CANVASTOP = 160,
     CANVASLEFT = 200,
-    CIRCLE = $('<div class="circle"></div>'),
+    CIRCLE = $('<img class="circle" src="incision2.png">'),
     CLICK_X=0,
     CLICK_Y=0;
 
@@ -111,7 +111,7 @@
 
     $("#liver").mousehold(50, function(i){  
       console.log(i);
-      var newCircle = $('<div class="circle"></div>'),
+      var newCircle = $('<img class="circle" src="incision2.png">'),
       context = document.getElementById('liverCanvas').getContext('2d'),
       data = context.getImageData(CLICK_X - CANVASLEFT, CLICK_Y - CANVASTOP, 1, 1).data,
       bg = '#'+RGBtoHex(data[0],data[1], data[2]);
@@ -120,15 +120,15 @@
       if (i < 25) {
         var styles = {
           //'background':              '-webkit-gradient(radial, 206 -88, 0, 0 -29, 412, from(#FCFCFC), to(#000), color-stop(.7,'+bg+'))',
-          'background':             'transparent url("incision2.png") no-repeat',
-          '-webkit-border-radius':  '50px',
-          'width':                  50 + 3*i + 'px',
-          'height':                 50 + 3*i + 'px',
+          //'background':             'transparent url("incision2.png") no-repeat',
+          //'-webkit-border-radius':  '50px',
+          'width':                  3*i + 'px',
+          'height':                 3*i + 'px',
           'z-index':                "30",
           'opacity':                0.2+0.1*i+'',
           'position':               "absolute",
-          'top':                    CLICK_Y - (50 + 3*1),
-          'left':                   CLICK_X - (50 + 3*1)
+          'top':                    CLICK_Y + (3*1) + 'px',
+          'left':                   CLICK_X + (3*1) + 'px'
         };
 
         newCircle.css(styles);
