@@ -122,13 +122,13 @@
           //'background':              '-webkit-gradient(radial, 206 -88, 0, 0 -29, 412, from(#FCFCFC), to(#000), color-stop(.7,'+bg+'))',
           //'background':             'transparent url("incision2.png") no-repeat',
           //'-webkit-border-radius':  '50px',
-          'width':                  3*i + 'px',
-          'height':                 3*i + 'px',
+          'width':                  50 + 3*i + 'px',
+          'height':                 50 + 3*i + 'px',
           'z-index':                "30",
           'opacity':                0.2+0.1*i+'',
           'position':               "absolute",
-          'top':                    CLICK_Y + (3*1) + 'px',
-          'left':                   CLICK_X + (3*1) + 'px'
+          'top':                    CLICK_Y - (50 + 3*i)/2 + 'px',
+          'left':                   CLICK_X - (50 + 3*i)/2 + 'px'
         };
 
         newCircle.css(styles);
