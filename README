@@ -1,0 +1,13 @@
+User Interface of Systems Design Engineering 3B Design Project
+
+Purpose
+=======
+
+This code uses HTML5/CSS3/JS to create a mock-tissue on the screen, and allows the user to interact with it through their mouse. In the final project, this will be replaced with a Haptic device.
+
+Essentially, the user is able to press and hold their mouse down on a section of the tissue. The UI reflects this by creating images that appears as though the tissue is getting depressed with a sharp scalpel.
+
+
+View Code
+=========
+To view, simply open up the interface.html page. Most of the code is written in jQuery and is available in events.js. It's not the neatest code, but is hopefully understandable.
